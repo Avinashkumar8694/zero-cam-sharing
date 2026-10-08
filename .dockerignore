@@ -1,0 +1,13 @@
+# keep the build context small: only the web source is needed
+node_modules
+dist
+dist-ssr
+build
+release
+android
+ios
+electron
+.git
+.DS_Store
+*.log
+public/downloads

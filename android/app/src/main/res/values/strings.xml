@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">zero-cam-sharing</string>
+    <string name="title_activity_main">zero-cam-sharing</string>
+    <string name="package_name">com.zerocam.sharing</string>
+    <string name="custom_url_scheme">com.zerocam.sharing</string>
+</resources>

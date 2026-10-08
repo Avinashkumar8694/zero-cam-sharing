@@ -1,0 +1,62 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary: #3b82f6;
+  --color-primary-focus: #2563eb;
+  --color-bg-dark: #0f172a;
+  --color-bg-darker: #020617;
+  --color-panel: rgba(30, 41, 59, 0.7);
+  --color-panel-border: rgba(255, 255, 255, 0.1);
+  --font-sans: 'Inter', system-ui, sans-serif;
+}
+
+@layer base {
+  body {
+    background-color: var(--color-bg-darker);
+    color: white;
+    font-family: var(--font-sans);
+    margin: 0;
+  }
+}
+
+.glass-panel {
+  background: var(--color-panel);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--color-panel-border);
+  border-radius: 1rem;
+}
+
+.scanner-overlay {
+  box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.5);
+}
+
+.scan-line {
+  width: 100%;
+  height: 2px;
+  background-color: #4ade80;
+  box-shadow: 0 0 8px #4ade80, 0 0 16px #4ade80;
+  animation: scan 2s linear infinite;
+  position: absolute;
+}
+
+@keyframes scan {
+  0% { top: 0; }
+  50% { top: 100%; }
+  100% { top: 0; }
+}
+
+.btn-primary {
+  @apply px-6 py-3 rounded-lg font-medium transition-all duration-300;
+  background: linear-gradient(135deg, var(--color-primary), var(--color-primary-focus));
+  box-shadow: 0 4px 14px 0 rgba(59, 130, 246, 0.39);
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(59, 130, 246, 0.23);
+}
+
+.btn-primary:active {
+  transform: translateY(1px);
+}
