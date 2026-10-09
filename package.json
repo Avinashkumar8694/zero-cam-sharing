@@ -1,11 +1,11 @@
 {
   "name": "fabrixly-cam-sharing",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
   "description": "Fabrixly Cam Sharing App",
   "author": {
-    "name": "Zero-Cam",
-    "email": "dev@zerocam.com"
+    "name": "Fabrixly",
+    "email": "admin@fabrixly.com"
   },
   "homepage": "https://cam-share.fabrixly.com",
   "main": "electron/main.js",
@@ -67,21 +67,70 @@
     },
     "mac": {
       "target": [
-        "dmg",
-        "zip"
-      ]
+        {
+          "target": "dmg",
+          "arch": [
+            "arm64",
+            "x64"
+          ]
+        },
+        {
+          "target": "zip",
+          "arch": [
+            "arm64",
+            "x64"
+          ]
+        }
+      ],
+      "category": "public.app-category.utilities"
     },
     "win": {
       "target": [
-        "nsis",
-        "portable"
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        },
+        {
+          "target": "zip",
+          "arch": [
+            "x64"
+          ]
+        }
       ]
     },
     "linux": {
       "target": [
-        "AppImage",
-        "deb"
-      ]
-    }
+        {
+          "target": "AppImage",
+          "arch": [
+            "x64"
+          ]
+        },
+        {
+          "target": "deb",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "category": "Utility",
+      "maintainer": "Fabrixly <admin@fabrixly.com>"
+    },
+    "artifactName": "FabrixlyCamSharing-${version}-${os}-${arch}.${ext}",
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": true,
+      "artifactName": "FabrixlyCamSharing-Setup-${version}-${arch}.${ext}"
+    },
+    "files": [
+      "dist/**/*",
+      "electron/**/*",
+      "build/icon.png",
+      "package.json",
+      "!node_modules/**/*"
+    ]
   }
 }

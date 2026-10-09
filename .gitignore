@@ -61,3 +61,7 @@ GoogleService-Info.plist
 .env
 .env.*
 !.env.example
+
+# installers built locally (never committed)
+release/
+out-*/
