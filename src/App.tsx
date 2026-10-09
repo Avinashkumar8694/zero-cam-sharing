@@ -3,6 +3,7 @@ import { Sender } from './components/Sender';
 import { Receiver } from './components/Receiver';
 import { QrCode, Smartphone, Send, Download, Monitor, Shield, Zap, WifiOff, Layout, ChevronRight } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { Capacitor } from '@capacitor/core';
 
 // The installers are the assets of the matching GitHub release (tag v<version>), built with build_all.sh / electron-builder.
 // Keep APP_VERSION in sync with package.json when you publish a new release.
@@ -34,6 +35,35 @@ declare global {
   }
 }
 
+
+// Inside the desktop and Android apps there is nothing to download or to read about: it opens straight into Send / Receive.
+function NativeHome({ onPick }: { onPick: (r: 'sender' | 'receiver') => void }) {
+  return (
+    <div className="min-h-screen w-full flex flex-col items-center justify-center bg-slate-950 text-slate-200 px-6 py-10 font-sans">
+      <div className="flex items-center gap-3 mb-3">
+        <div className="bg-gradient-to-br from-blue-500 to-purple-500 p-2 rounded-xl shadow-lg shadow-purple-500/20">
+          <QrCode size={28} className="text-white" />
+        </div>
+        <h1 className="text-2xl font-extrabold tracking-tight text-white">Fabrixly Cam Sharing</h1>
+      </div>
+      <p className="text-slate-400 text-center max-w-sm mb-10">Send files between two screens with no network: one device shows QR codes, the other scans them with its camera.</p>
+      <div className="w-full max-w-md flex flex-col gap-4">
+        <button onClick={() => onPick('sender')} className="group rounded-2xl border border-blue-500/30 bg-blue-500/10 hover:bg-blue-500/20 transition p-6 flex items-center justify-between">
+          <div className="flex items-center gap-4"><Send size={24} className="text-blue-400" /><div className="text-left"><h2 className="font-bold text-lg">Send a File</h2><p className="text-sm text-white/50">Show QR codes on this screen</p></div></div>
+          <ChevronRight size={20} className="text-white/30 group-hover:text-white transition" />
+        </button>
+        <button onClick={() => onPick('receiver')} className="group rounded-2xl border border-purple-500/30 bg-purple-500/10 hover:bg-purple-500/20 transition p-6 flex items-center justify-between">
+          <div className="flex items-center gap-4"><Download size={24} className="text-purple-400" /><div className="text-left"><h2 className="font-bold text-lg">Receive a File</h2><p className="text-sm text-white/50">Scan with this device&apos;s camera</p></div></div>
+          <ChevronRight size={20} className="text-white/30 group-hover:text-white transition" />
+        </button>
+      </div>
+      <p className="mt-10 text-xs text-slate-600">Version {APP_VERSION}</p>
+    </div>
+  );
+}
+
+const isNativeApp = () => !!window.electronAPI || Capacitor.isNativePlatform();
+
 function App() {
   const [role, setRole] = useState<'home' | 'sender' | 'receiver'>('home');
   const [os, setOs] = useState<'mac' | 'win' | 'linux' | 'android' | 'unknown'>('unknown');
@@ -48,6 +78,7 @@ function App() {
 
   if (role === 'sender') return <Sender onBack={() => setRole('home')} />;
   if (role === 'receiver') return <Receiver onBack={() => setRole('home')} />;
+  if (isNativeApp()) return <NativeHome onPick={setRole} />;
 
   const primaryDownload = {
     mac: { link: dl(FILE.macArm), label: 'Download for macOS', icon: <Monitor size={20} /> },

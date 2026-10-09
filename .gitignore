@@ -65,3 +65,4 @@ GoogleService-Info.plist
 # installers built locally (never committed)
 release/
 out-*/
+store-assets/
