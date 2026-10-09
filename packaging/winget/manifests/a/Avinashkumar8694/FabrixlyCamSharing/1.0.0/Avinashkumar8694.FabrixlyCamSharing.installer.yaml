@@ -1,0 +1,13 @@
+PackageIdentifier: Avinashkumar8694.FabrixlyCamSharing
+PackageVersion: 1.0.0
+InstallerType: nullsoft
+Scope: user
+InstallerSwitches:
+  Silent: /S
+  SilentWithProgress: /S
+Installers:
+- Architecture: x64
+  InstallerUrl: https://github.com/Avinashkumar8694/zero-cam-sharing/releases/download/v1.0.0/FabrixlyCamSharing-Setup-1.0.0-x64.exe
+  InstallerSha256: F2ED10651461099441BD23F018E9EC91148C76C901FF814BB5A10B0F9FB5C55F
+ManifestType: installer
+ManifestVersion: 1.6.0
