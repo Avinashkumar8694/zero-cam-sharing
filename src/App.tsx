@@ -4,6 +4,25 @@ import { Receiver } from './components/Receiver';
 import { QrCode, Smartphone, Send, Download, Monitor, Shield, Zap, WifiOff, Layout, ChevronRight } from 'lucide-react';
 import { motion } from 'framer-motion';
 
+// The installers are the assets of the matching GitHub release (tag v<version>), built with build_all.sh / electron-builder.
+// Keep APP_VERSION in sync with package.json when you publish a new release.
+const APP_VERSION = '1.0.0';
+const RELEASE_URL = `https://github.com/Avinashkumar8694/zero-cam-sharing/releases/download/v${APP_VERSION}`;
+const FILE = {
+  macArm: `FabrixlyCamSharing-${APP_VERSION}-mac-arm64.dmg`,
+  macIntel: `FabrixlyCamSharing-${APP_VERSION}-mac-x64.dmg`,
+  macArmZip: `FabrixlyCamSharing-${APP_VERSION}-mac-arm64.zip`,
+  macIntelZip: `FabrixlyCamSharing-${APP_VERSION}-mac-x64.zip`,
+  winSetup: `FabrixlyCamSharing-Setup-${APP_VERSION}-x64.exe`,
+  winZip: `FabrixlyCamSharing-${APP_VERSION}-win-x64.zip`,
+  appImage: `FabrixlyCamSharing-${APP_VERSION}-linux-x86_64.AppImage`,
+  deb: `FabrixlyCamSharing-${APP_VERSION}-linux-amd64.deb`,
+  apk: `FabrixlyCamSharing-${APP_VERSION}-android.apk`,
+  sums: 'SHA256SUMS',
+};
+const dl = (file: string) => `${RELEASE_URL}/${file}`;
+const altLink = 'text-xs text-slate-400 hover:text-white underline underline-offset-2 transition';
+
 // Declare electronAPI globally
 declare global {
   interface Window {
@@ -21,20 +40,20 @@ function App() {
 
   useEffect(() => {
     const userAgent = window.navigator.userAgent.toLowerCase();
-    if (userAgent.indexOf('mac') !== -1) setOs('mac');
+    if (userAgent.indexOf('android') !== -1) setOs('android');
+    else if (userAgent.indexOf('mac') !== -1) setOs('mac');
     else if (userAgent.indexOf('win') !== -1) setOs('win');
     else if (userAgent.indexOf('linux') !== -1) setOs('linux');
-    else if (userAgent.indexOf('android') !== -1) setOs('android');
   }, []);
 
   if (role === 'sender') return <Sender onBack={() => setRole('home')} />;
   if (role === 'receiver') return <Receiver onBack={() => setRole('home')} />;
 
   const primaryDownload = {
-    mac: { link: '/downloads/desktop/Fabrixly Cam Sharing-0.0.0-arm64.dmg', label: 'Download for macOS', icon: <Monitor size={20} /> },
-    win: { link: '/downloads/desktop/Fabrixly Cam Sharing Setup 0.0.0.exe', label: 'Download for Windows', icon: <Monitor size={20} /> },
-    linux: { link: '/downloads/desktop/Fabrixly Cam Sharing-0.0.0.AppImage', label: 'Download for Linux', icon: <Monitor size={20} /> },
-    android: { link: '/downloads/android/app-debug.apk', label: 'Download for Android', icon: <Smartphone size={20} /> },
+    mac: { link: dl(FILE.macArm), label: 'Download for macOS', icon: <Monitor size={20} /> },
+    win: { link: dl(FILE.winSetup), label: 'Download for Windows', icon: <Monitor size={20} /> },
+    linux: { link: dl(FILE.appImage), label: 'Download for Linux', icon: <Monitor size={20} /> },
+    android: { link: dl(FILE.apk), label: 'Download for Android', icon: <Smartphone size={20} /> },
     unknown: { link: '#downloads', label: 'View Downloads', icon: <Download size={20} /> }
   }[os];
 
@@ -230,7 +249,8 @@ function App() {
                 </div>
                 <h3 className="font-bold text-lg mb-1">macOS</h3>
                 <p className="text-sm text-slate-500 mb-6">Apple Silicon & Intel</p>
-                <a href="/downloads/desktop/Fabrixly Cam Sharing-0.0.0-arm64.dmg" download className="mt-auto w-full py-3 bg-white/10 hover:bg-white/20 transition rounded-xl font-medium text-sm">Download DMG</a>
+                <a href={dl(FILE.macArm)} download className="mt-auto w-full py-3 bg-white/10 hover:bg-white/20 transition rounded-xl font-medium text-sm">Download DMG (Apple Silicon)</a>
+                <div className="mt-3 flex flex-col items-center gap-1"><a href={dl(FILE.macIntel)} download className={altLink}>Intel Mac (.dmg)</a><a href={dl(FILE.macArmZip)} download className={altLink}>Apple Silicon (.zip)</a><a href={dl(FILE.macIntelZip)} download className={altLink}>Intel Mac (.zip)</a></div>
               </div>
               
               <div className="bg-slate-950 p-6 rounded-3xl border border-white/5 flex flex-col items-center">
@@ -239,7 +259,8 @@ function App() {
                 </div>
                 <h3 className="font-bold text-lg mb-1">Windows</h3>
                 <p className="text-sm text-slate-500 mb-6">Windows 10/11</p>
-                <a href="/downloads/desktop/Fabrixly Cam Sharing Setup 0.0.0.exe" download className="mt-auto w-full py-3 bg-white/10 hover:bg-white/20 transition rounded-xl font-medium text-sm">Download EXE</a>
+                <a href={dl(FILE.winSetup)} download className="mt-auto w-full py-3 bg-white/10 hover:bg-white/20 transition rounded-xl font-medium text-sm">Download EXE installer</a>
+                <div className="mt-3 flex flex-col items-center gap-1"><a href={dl(FILE.winZip)} download className={altLink}>Portable (.zip)</a></div>
               </div>
 
               <div className="bg-slate-950 p-6 rounded-3xl border border-white/5 flex flex-col items-center">
@@ -248,7 +269,8 @@ function App() {
                 </div>
                 <h3 className="font-bold text-lg mb-1">Linux</h3>
                 <p className="text-sm text-slate-500 mb-6">Ubuntu, Debian, Fedora</p>
-                <a href="/downloads/desktop/Fabrixly Cam Sharing-0.0.0.AppImage" download className="mt-auto w-full py-3 bg-white/10 hover:bg-white/20 transition rounded-xl font-medium text-sm">Download AppImage</a>
+                <a href={dl(FILE.appImage)} download className="mt-auto w-full py-3 bg-white/10 hover:bg-white/20 transition rounded-xl font-medium text-sm">Download AppImage</a>
+                <div className="mt-3 flex flex-col items-center gap-1"><a href={dl(FILE.deb)} download className={altLink}>Debian / Ubuntu (.deb)</a></div>
               </div>
 
               <div className="bg-slate-950 p-6 rounded-3xl border border-white/5 flex flex-col items-center">
@@ -257,10 +279,14 @@ function App() {
                 </div>
                 <h3 className="font-bold text-lg mb-1">Android</h3>
                 <p className="text-sm text-slate-500 mb-6">Android 9.0+</p>
-                <a href="/downloads/android/app-debug.apk" download className="mt-auto w-full py-3 bg-green-500 hover:bg-green-400 text-slate-950 transition rounded-xl font-bold text-sm">Download APK</a>
+                <a href={dl(FILE.apk)} download className="mt-auto w-full py-3 bg-green-500 hover:bg-green-400 text-slate-950 transition rounded-xl font-bold text-sm">Download APK</a>
               </div>
 
             </div>
+
+            <p className="mt-8 text-sm text-slate-500">
+              Version {APP_VERSION} · <a href={dl(FILE.sums)} className="underline underline-offset-2 hover:text-white">SHA256 checksums</a> · <a href={`https://github.com/Avinashkumar8694/zero-cam-sharing/releases/tag/v${APP_VERSION}`} className="underline underline-offset-2 hover:text-white" target="_blank" rel="noopener noreferrer">All builds and release notes</a>
+            </p>
           </div>
         </section>
 

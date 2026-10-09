@@ -67,13 +67,12 @@ Traefik fronts the container and issues the Let's Encrypt certificate for `cam-s
 
 To release a new version, bump the image tag in `docker-compose.prod.yml` and push to `main`.
 
-### Serving the installers
+### Installers
 
-Build the Android/desktop installers on your machine (`./build_all.sh`), then copy them once into the volume that nginx serves under `/downloads/`:
+The Android/desktop installers are **release assets on GitHub** (tag `v<version>`, e.g. `v1.0.0`): `.dmg`/`.zip` for macOS (Apple Silicon and Intel), the `.exe` installer and a portable `.zip` for Windows, `.AppImage` and `.deb` for Linux, the `.apk` for Android, and `SHA256SUMS`. The download buttons on https://cam-share.fabrixly.com link straight to those assets, so the server stores no installers.
 
-```bash
-docker run --rm -v zero-cam-sharing_camshare_downloads:/d -v "$PWD/public/downloads":/s alpine cp -r /s/. /d/
-```
+To publish a new version: bump `version` in `package.json` and `APP_VERSION` in `src/App.tsx`, run `./build_all.sh`, create the GitHub release `v<version>` with the files from the build, then push to `main` and run the Jenkins job.
+(`docker-compose.prod.yml` still mounts an optional `/downloads/` volume, unused by the site, in case you ever want to self-host the files.)
 
 ## Security
 
